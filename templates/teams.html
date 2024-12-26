@@ -72,7 +72,7 @@
                           <a class="nav-link profile-dropdown" href="#" id="profileDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="../../assets/images/avatars/profile-image.png" alt=""></a>
                           <div class="dropdown-menu dropdown-menu-end profile-drop-menu" aria-labelledby="profileDropDown">
                             <a class="dropdown-item" href="#"><i data-feather="settings"></i>Settings</a>
-                            <a class="dropdown-item" href="#"><i data-feather="log-out"></i>Logout</a>
+                            <a class="dropdown-item" href="{{ url_for('logout') }}"><i data-feather="log-out"></i>Logout</a>
                           </div>
                         </li>
                       </ul>
@@ -80,25 +80,25 @@
                 </nav>
             </div>
             <div class="page-sidebar">
-                <ul class="list-unstyled accordion-menu">
-                    <li class="sidebar-title">Main</li>
-                    <li class="{{ 'active' if current_page == 'dashboard' else '' }}">
-                        <a href="{{ url_for('dashboard') }}"><i data-feather="home"></i>Dashboard</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'users' else '' }}">
-                        <a href="{{ url_for('users') }}"><i data-feather="home"></i>Users</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'teams' else '' }}">
-                        <a href="{{ url_for('teams') }}"><i data-feather="home"></i>Teams</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'entries' else '' }}">
-                        <a href="{{ url_for('entries') }}"><i data-feather="home"></i>Entries</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'entriestable' else '' }}">
-                        <a href="{{ url_for('entriestable') }}"><i data-feather="home"></i>Entries Table</a>
-                    </li>
-                </ul>
-            </div>
+              <ul class="list-unstyled accordion-menu">
+                  <li class="sidebar-title">Main</li>
+                  <li class="{{ 'active' if current_page == 'dashboard' else '' }}">
+                      <a href="{{ url_for('dashboard') }}"><i data-feather="home"></i>Dashboard</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'users' else '' }}">
+                      <a href="{{ url_for('users') }}"><i data-feather="user"></i>Users</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'teams' else '' }}">
+                      <a href="{{ url_for('teams') }}"><i data-feather="users"></i>Teams</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'entries' else '' }}">
+                      <a href="{{ url_for('entries') }}"><i data-feather="message-circle"></i>Entries</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'entriestable' else '' }}">
+                      <a href="{{ url_for('entriestable') }}"><i data-feather="list"></i>Entries Table</a>
+                  </li>
+              </ul>
+          </div>
             <div class="page-content">
                 <div class="main-wrapper">
                   
@@ -106,12 +106,15 @@
                     <div class="col">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Users</h5>
-                                <p>New teams can be create. <code>$().DataTable();</code>.</p>
-                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                  Add Teams
-                                </button>
-                              
+                              <div class="row">
+                                <div class="col">
+                                  <h5 class="card-title">Teams</h5>
+                                </div>
+                                <div class="col p-4 d-flex">
+                                  <button type="button" class="btn btn-info ms-auto" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    Add New Team
+                                  </button>
+                                </div>
                               <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                   <div class="modal-dialog">
                                       <div class="modal-content">
@@ -146,12 +149,60 @@
                                       <tr>
                                           <td>{{ team[1] }}</td>
                                           <td>
-                                              <a href="#" class="text-primary me-3">
-                                                  <i class="fas fa-edit"></i>
-                                              </a>
-                                              <a href="#" class="text-danger">
-                                                  <i class="fas fa-trash-alt"></i>
-                                              </a>
+                                              <!-- Edit Button -->
+                                              <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ team[0] }}">
+                                                  <i class="fa fa-edit"></i>
+                                              </button>
+                                  
+                                              <!-- Delete Button -->
+                                              <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal{{ team[0] }}">
+                                                  <i class="fa fa-trash"></i>
+                                              </button>
+                                  
+                                              <!-- Edit Modal -->
+                                              <div class="modal fade" id="editModal{{ team[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel{{ team[0] }}" aria-hidden="true">
+                                                  <div class="modal-dialog">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header">
+                                                              <h5 class="modal-title" id="editModalLabel{{ team[0] }}">Edit Team</h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                          </div>
+                                                          <form method="POST" action="{{ url_for('edit_team', team_id=team[0]) }}">
+                                                              <div class="modal-body">
+                                                                  <div class="mb-3">
+                                                                      <label for="teamNameInput{{ team[0] }}" class="form-label">Team Name</label>
+                                                                      <input type="text" class="form-control" id="teamNameInput{{ team[0] }}" name="team_name" value="{{ team[1] }}" required>
+                                                                  </div>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                  <button type="submit" class="btn btn-primary">Update Team</button>
+                                                              </div>
+                                                          </form>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                  
+                                              <!-- Delete Modal -->
+                                              <div class="modal fade" id="deleteModal{{ team[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModalLabel{{ team[0] }}" aria-hidden="true">
+                                                  <div class="modal-dialog">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header">
+                                                              <h5 class="modal-title" id="deleteModalLabel{{ team[0] }}">Confirm Deletion</h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                              Are you sure you want to delete the team <strong>{{ team[1] }}</strong>?
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                              <form method="POST" action="{{ url_for('delete_team', team_id=team[0]) }}">
+                                                                  <button type="submit" class="btn btn-danger">Delete</button>
+                                                              </form>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
                                           </td>
                                       </tr>
                                       {% endfor %}

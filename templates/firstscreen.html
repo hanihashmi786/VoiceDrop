@@ -10,7 +10,7 @@
         <!-- The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         
         <!-- Title -->
-        <title>Voice Drop - Login</title>
+        <title>Circl - Responsive Admin Dashboard Template</title>
 
         <!-- Styles -->
         <link href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -19,7 +19,6 @@
         <link href="{{ url_for('static', filename='plugins/apexcharts/apexcharts.css') }}" rel="stylesheet">
         <link href="{{ url_for('static', filename='css/main.min.css') }}" rel="stylesheet">
         <link href="{{ url_for('static', filename='css/custom.css') }}" rel="stylesheet">
-
 
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -34,7 +33,7 @@
               <span class='sr-only'>Loading...</span>
             </div>
           </div>
-          <div class="container">
+        <div class="container">
             <div class="row justify-content-md-center">
                 <div class="col-md-12 col-lg-4">
                     <div class="card login-box-container">
@@ -44,37 +43,11 @@
                             </div>
                             <div class="authent-text">
                                 <p>Welcome to Voice Drop</p>
-                                <p>Please Sign-in to your account.</p>
+                                <p>Please Proceed to Login</p>
                             </div>
-
-                            <!-- Flash Messages -->
-                            {% with messages = get_flashed_messages(with_categories=true) %}
-                                {% if messages %}
-                                    <div class="alert alert-danger">
-                                        {% for message in messages %}
-                                            <p>{{ message }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            {% endwith %}
-
-                            <form action="{{ url_for('login') }}" method="POST">
-                                <div class="mb-3">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="floatingInput" placeholder="Enter your username" name="username" required>
-                                        <label for="floatingInput">Username</label>
-                                    </div>
-                                </div>
-                                <div class="mb-3">
-                                    <div class="form-floating">
-                                        <input type="password" class="form-control" id="floatingPassword" placeholder="Enter your password" name="password" required>
-                                        <label for="floatingPassword">Password</label>
-                                    </div>
-                                </div>
-                                <div class="d-grid">
-                                    <button type="submit" class="btn btn-info m-b-xs">Sign In</button>
-                                </div>
-                            </form>
+                              <div class="authent-login">
+                                  <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+                              </div>
                         </div>
                     </div>
                 </div>

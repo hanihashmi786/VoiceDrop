@@ -10,7 +10,7 @@
         <!-- The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags -->
         
         <!-- Title -->
-        <title>User - Dashboard</title>
+        <title>User</title>
 
         <!-- Styles -->
         <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,700,800&display=swap" rel="stylesheet">
@@ -74,7 +74,7 @@
                           <a class="nav-link profile-dropdown" href="#" id="profileDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="../../assets/images/avatars/profile-image.png" alt=""></a>
                           <div class="dropdown-menu dropdown-menu-end profile-drop-menu" aria-labelledby="profileDropDown">
                             <a class="dropdown-item" href="#"><i data-feather="settings"></i>Settings</a>
-                            <a class="dropdown-item" href="#"><i data-feather="log-out"></i>Logout</a>
+                            <a class="dropdown-item" href="{{ url_for('logout') }}"><i data-feather="log-out"></i>Logout</a>
                           </div>
                         </li>
                       </ul>
@@ -82,25 +82,25 @@
                 </nav>
             </div>
             <div class="page-sidebar">
-                <ul class="list-unstyled accordion-menu">
-                    <li class="sidebar-title">Main</li>
-                    <li class="{{ 'active' if current_page == 'dashboard' else '' }}">
-                        <a href="{{ url_for('dashboard') }}"><i data-feather="home"></i>Dashboard</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'users' else '' }}">
-                        <a href="{{ url_for('users') }}"><i data-feather="home"></i>Users</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'teams' else '' }}">
-                        <a href="{{ url_for('teams') }}"><i data-feather="home"></i>Teams</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'entries' else '' }}">
-                        <a href="{{ url_for('entries') }}"><i data-feather="home"></i>Entries</a>
-                    </li>
-                    <li class="{{ 'active' if current_page == 'entriestable' else '' }}">
-                        <a href="{{ url_for('entriestable') }}"><i data-feather="home"></i>Entries Table</a>
-                    </li>
-                </ul>
-            </div>
+              <ul class="list-unstyled accordion-menu">
+                  <li class="sidebar-title">Main</li>
+                  <li class="{{ 'active' if current_page == 'dashboard' else '' }}">
+                      <a href="{{ url_for('dashboard') }}"><i data-feather="home"></i>Dashboard</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'users' else '' }}">
+                      <a href="{{ url_for('users') }}"><i data-feather="user"></i>Users</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'teams' else '' }}">
+                      <a href="{{ url_for('teams') }}"><i data-feather="users"></i>Teams</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'entries' else '' }}">
+                      <a href="{{ url_for('entries') }}"><i data-feather="message-circle"></i>Entries</a>
+                  </li>
+                  <li class="{{ 'active' if current_page == 'entriestable' else '' }}">
+                      <a href="{{ url_for('entriestable') }}"><i data-feather="list"></i>Entries Table</a>
+                  </li>
+              </ul>
+          </div>
             <div class="page-content">
                 <div class="main-wrapper">
                     <div class="date-filter-section">
@@ -112,38 +112,80 @@
                         
                         <button class="btn btn-primary get-entries-btn">Get Entries</button>
                     </div>  
-                  <div class="row">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Entries </h5>
-                                <p>New users can be create. <code>$().DataTable();</code>.</p>
-                                <table id="zero-conf" class="display" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Comments</th>
-                                            <th>File</th>
-                                            <th>Date</th>
-                                            <th>File Name</th>
-                                            <th>Status</th>
-                                            <th>Users</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Donna Snider</td>
-                                            <td>Customer Support</td>
-                                            <td>New York</td>
-                                            <td>27</td>
-                                            <td>2011/01/25</td>
-                                            <th>User</th>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    <div class="row">
+                      <div class="col-12">
+                          <div class="card">
+                              <div class="card-body">
+                                  <h5 class="card-title">Entries</h5>
+                                  <div class="table-responsive">
+                                      <table id="zero-conf" class="table table-bordered table-striped" style="width:100%">
+                                          <thead>
+                                              <tr>
+                                                  <th>Comments</th>
+                                                  <th>File Name</th>
+                                                  <th>File Path</th>
+                                                  <th>Date</th>
+                                                  <th>User</th>
+                                                  <th>Status</th>
+                                                  <th>Actions</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                            {% for entry in audio_entries %}
+                                            <tr>
+                                                <td>{{ entry[3] }}</td>  <!-- Assuming 'comments' is at index 3 -->
+                                                <td>{{ entry[1] }}</td>  <!-- Assuming 'file_name' is at index 1 -->
+                                                <td>
+                                                    <audio controls>
+                                                        <source src="{{ url_for('static', filename='uploads/' + entry[1]) }}" type="audio/mpeg">
+                                                        Your browser does not support the audio element.
+                                                    </audio>
+                                                    <a href="{{ url_for('static', filename='uploads/' + entry[1]) }}" download>
+                                                        <i class="fa fa-download"></i> Download
+                                                    </a>
+                                                </td>
+                                                <td>{{ entry[4] }}</td> <!-- Assuming 'date' is at index 4 -->
+                                                <td>{{ entry[6] }}</td> <!-- Assuming 'user' is at index 5 -->
+                                                <td>{{ entry[5] }}</td>  <!-- Assuming 'status' is at index 6 -->
+                                                <td>
+                                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ entry[0] }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                    <!-- Modal for Editing -->
+                                                    <div class="modal fade" id="editModal{{ entry[0] }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editModalLabel{{ entry[0] }}" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="editModalLabel{{ entry[0] }}">Edit Entry</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                </div>
+                                                                <form method="POST" action="{{ url_for('edit_entry', entry_id=entry[0]) }}">
+                                                                    <div class="mb-3 p-4">
+                                                                        <label for="commentsInput{{ entry[0] }}" class="form-label">Comments</label>
+                                                                        <input type="text" class="form-control" id="commentsInput{{ entry[0] }}" name="comments" value="{{ entry[3] }}" placeholder="Enter Label">
+                                                                    </div>
+                                                                    <div class="p-4">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa fa-close"></i> Close</button>
+                                                                        <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Update</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <a href="{{ url_for('delete_entry', entry_id=entry[0]) }}" class="btn btn-danger btn-sm">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                      </table>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                  
                 </div>
                 </div>
         </div>

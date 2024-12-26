@@ -73,7 +73,7 @@
                           <a class="nav-link profile-dropdown" href="#" id="profileDropDown" role="button" data-bs-toggle="dropdown" aria-expanded="false"><img src="{{ url_for('static', filename='images/avatars/profile-image.png') }}" alt=""></a>
                           <div class="dropdown-menu dropdown-menu-end profile-drop-menu" aria-labelledby="profileDropDown">
                             <a class="dropdown-item" href="#"><i data-feather="settings"></i>Settings</a>
-                            <a class="dropdown-item" href="#"><i data-feather="log-out"></i>Logout</a>
+                            <a class="dropdown-item" href="{{ url_for('logout') }}"><i data-feather="log-out"></i>Logout</a>
                           </div>
                         </li>
                       </ul>
@@ -87,16 +87,16 @@
                       <a href="{{ url_for('dashboard') }}"><i data-feather="home"></i>Dashboard</a>
                   </li>
                   <li class="{{ 'active' if current_page == 'users' else '' }}">
-                      <a href="{{ url_for('users') }}"><i data-feather="home"></i>Users</a>
+                      <a href="{{ url_for('users') }}"><i data-feather="user"></i>Users</a>
                   </li>
                   <li class="{{ 'active' if current_page == 'teams' else '' }}">
-                      <a href="{{ url_for('teams') }}"><i data-feather="home"></i>Teams</a>
+                      <a href="{{ url_for('teams') }}"><i data-feather="users"></i>Teams</a>
                   </li>
                   <li class="{{ 'active' if current_page == 'entries' else '' }}">
-                      <a href="{{ url_for('entries') }}"><i data-feather="home"></i>Entries</a>
+                      <a href="{{ url_for('entries') }}"><i data-feather="message-circle"></i>Entries</a>
                   </li>
                   <li class="{{ 'active' if current_page == 'entriestable' else '' }}">
-                      <a href="{{ url_for('entriestable') }}"><i data-feather="home"></i>Entries Table</a>
+                      <a href="{{ url_for('entriestable') }}"><i data-feather="list"></i>Entries Table</a>
                   </li>
               </ul>
           </div>
